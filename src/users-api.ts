@@ -4,7 +4,10 @@
 
 // Use Express library
 
-import express, { Request, Response } from 'express';
+import { error } from 'console';
+
+import * as express from 'express';
+import { Request, Response } from 'express';
 const app = express();
 
 app.use(express.json());
@@ -12,7 +15,15 @@ app.use(express.json());
 const users: { name: string }[] = [];
 
 app.post('/user', (req: Request, res: Response) => {
-    res.status(200).send();
+    const{name}=req.body;
+
+    if(!name || typeof name !== 'string'){
+        return res.status(400).json({error:'Name is required'});
+    }
+
+    users.push({name});
+
+    res.status(201).json({message: 'User added success', user: {name}});
 });
 
 app.get('/users', (req: Request, res: Response) => {
